@@ -1,5 +1,5 @@
 /** A simple Observable/Observer pattern implementation */
-function Subject(): {
+export function Subject(): {
   react: (val: any) => void;
   subscribe: (callback: (...args: any[]) => void) => void;
 } {

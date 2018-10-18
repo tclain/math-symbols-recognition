@@ -2,11 +2,16 @@
 
 import { mapValues } from "lodash";
 import * as React from "react";
+import { Subject } from "./subject";
 
 /** A reducer is function that take a current state and the current action and returns a state */
 interface IReducers<State> {
   [key: string]: (state: State, action?: { payload: any }) => State;
 }
+
+type IActions<Reducers extends Object> = {
+  [key in keyof Reducers]: (payload?: any) => void
+};
 
 /** The main options object  */
 interface IOptions<State, Reducers extends IReducers<State>> {
@@ -16,7 +21,7 @@ interface IOptions<State, Reducers extends IReducers<State>> {
   effects?: {
     [key: string]: (
       store: {
-        select: (...args: any[]) => void;
+        select: (matcher: (state: State) => any) => any;
       },
       action: { type: string; payload: any }
     ) => void;
@@ -25,7 +30,7 @@ interface IOptions<State, Reducers extends IReducers<State>> {
 
 /** how to access the state inside the view (inspired by connect function) */
 interface IViewMapping<State> {
-  [key: string]: (stateMatcher: ((state: State) => any)) => void;
+  [key: string]: ((state: State) => any);
 }
 
 /** */
@@ -39,7 +44,7 @@ interface IBuiltModel<State, Reducers extends IReducers<State>> {
     Component: React.ComponentType<BaseProps>
   ) => React.ComponentType<BaseProps>;
 
-  actions: { [key in keyof Reducers]: (payload?: any) => void };
+  actions: IActions<Reducers>;
 }
 
 /** an ultra simplified version of the model from @pyx4/redux while retaining api compatible options */
@@ -76,7 +81,7 @@ export function model<State, Reducers extends IReducers<State>>(
         effects[key](StoreLike, { type: `${options.name}/${key}`, payload });
       }
       channel.react(state);
-    }),
+    }) as IActions<Reducers>,
     /** A HOC injecting state in the inner component */
     view: (stateMapping: IViewMapping<State>, actionsMapping = {}) => {
       // the generated component with the mapping to the state
@@ -94,7 +99,9 @@ export function model<State, Reducers extends IReducers<State>>(
           }
           /** get the values from the state as specified by the mapping */
           private mapValuesFromState() {
-            return mapValues(stateMapping, mapping => mapping(this.state));
+            return mapValues(stateMapping, mapping =>
+              mapping(this.state as any)
+            );
           }
           public render() {
             return (
