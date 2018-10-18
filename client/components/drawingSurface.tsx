@@ -2,6 +2,7 @@ import { last, head } from "lodash";
 import * as React from "react";
 import { css } from "emotion";
 import simplify from "simplify-js";
+import { getImageData } from "../utils/image";
 
 export const SquareCanvasStyled = css`
   display: block;
@@ -18,6 +19,11 @@ export interface IPoint {
   x: number;
   y: number;
 }
+/** the props for the drawing surface */
+export interface DrawingSurfaceProps {
+  /** a method called when a drawing is complete */
+  onDraw?: (imageData: any) => void;
+}
 
 /**
  * A simple canvas based drawing surface.
@@ -25,7 +31,7 @@ export interface IPoint {
  * This demonstrate how we can simply integrate web api inside React rendering process
  */
 
-export class DrawingSurface extends React.Component<any> {
+export class DrawingSurface extends React.Component<DrawingSurfaceProps> {
   private canvasRef: React.Ref<any> | any;
   private canvasContext: CanvasRenderingContext2D;
   /**
@@ -58,12 +64,45 @@ export class DrawingSurface extends React.Component<any> {
 
   componentDidMount() {
     this.draw();
+    // this.preventScrollToBeTakenInAccount();
   }
 
   shouldComponentUpdate() {
     // we are taking care of the rendering, thank you
     return false;
   }
+
+  /*
+  private preventScrollToBeTakenInAccount() {
+    document.body.addEventListener(
+      "touchstart",
+      e => {
+        if (e.target == this.canvasRef) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
+    document.body.addEventListener(
+      "touchend",
+      e => {
+        if (e.target == this.canvasRef) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
+    document.body.addEventListener(
+      "touchmove",
+      e => {
+        if (e.target == this.canvasRef) {
+          e.preventDefault();
+        }
+      },
+      false
+    );
+  }
+  */
   /** retrieve the 2d drawingContext */
   private getDrawingContext() {
     //once the canvas is mounted, get its context
@@ -145,6 +184,14 @@ export class DrawingSurface extends React.Component<any> {
       context.closePath();
       context.stroke();
     });
+
+    if (this.props.onDraw) {
+      this.props.onDraw(
+        //getImageData(this.canvasRef.current)
+        this.canvasRef.current.toDataURL()
+        //context.getImageData(0, 0, context.canvas.width, context.canvas.height)
+      );
+    }
   }
 
   public render() {
@@ -155,9 +202,11 @@ export class DrawingSurface extends React.Component<any> {
         height={500}
         ref={this.canvasRef}
         onMouseDown={this.onMousePointerDown}
+        //onPointerDownCapture={this.onMousePointerDown}
         onMouseMove={this.onMousePointerMoving}
-        onMouseUp={this.onMousePointerUp}
-
+        //onPointerMove={this.onMousePointerDown}
+        onMouseUpCapture={this.onMousePointerUp}
+        //onPointerUp={this.onMousePointerUp}
         //onPointerDown={this.onMousePointerDown}
       />
     );

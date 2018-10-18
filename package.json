@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "client:dev": "cd client && parcel index.html"
+    "client:dev": "cd client && parcel index.html",
+    "client:build": "cd client && parcel build index.html"
   },
   "keywords": [],
   "author": "",
@@ -16,12 +17,16 @@
     "@types/node": "^10.12.0",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
+    "base64-img": "^1.0.4",
+    "body-parser": "^1.18.3",
     "brain.js": "^1.4.2",
     "emotion": "^9.2.12",
+    "express": "^4.16.4",
     "lodash": "^4.17.11",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-emotion": "^9.2.12",
+    "sharp": "^0.21.0",
     "simplify-js": "^1.2.3"
   },
   "devDependencies": {

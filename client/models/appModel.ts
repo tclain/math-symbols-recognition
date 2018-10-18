@@ -34,16 +34,15 @@ export const AppModel = model({
         predictionError: payload || true
       };
     },
-    predict(state) {
+    predict(state, { payload }) {
       return state;
     }
   },
   effects: {
     async predict(store, action) {
       AppModel.actions.setLoading(true);
-      const imageData = store.select(state => state.canvasData);
       try {
-        const prediction = await predictFromData(imageData);
+        const prediction = await predictFromData(action.payload);
         AppModel.actions.setPrediction(prediction);
       } catch (e) {
         AppModel.actions.setPredictionError(e);

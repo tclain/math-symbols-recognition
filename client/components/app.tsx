@@ -1,4 +1,5 @@
 import * as React from "react";
+import { debounce } from "lodash";
 import { Header } from "./header";
 import { DrawingSurface } from "./drawingSurface";
 import { MathCharacter } from "./mathCharacter";
@@ -14,10 +15,15 @@ export interface AppProps {
   predict: () => void;
 }
 
-export const App: React.SFC<AppProps> = ({ loading, error, prediction }) => (
+export const App: React.SFC<AppProps> = ({
+  loading,
+  error,
+  prediction,
+  predict
+}) => (
   <div>
     <Header>Draw a character in the box</Header>
-    <DrawingSurface />
+    <DrawingSurface onDraw={debounce(predict, 300)} />
     {error && <Header>Oups, something is wrong</Header>}
     {loading && !error ? (
       <Header>Humm...</Header>

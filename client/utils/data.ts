@@ -1,10 +1,14 @@
 /** fetch data from the backend */
 
-export function predictFromData(data: string): Promise<string> {
-  //return fetch()
-  return new Promise((resolve, reject) => {
-    window.setInterval(() => {
-      resolve("=");
-    }, 1000);
-  });
+export function predictFromData(data: any): Promise<string> {
+  console.log(data);
+  console.log("about to predict smthing");
+  return fetch("http://localhost:1245/predict", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ image: data })
+  })
+    .then(res => res.json())
+    .then(res => res.result as string);
 }
