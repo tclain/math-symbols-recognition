@@ -2,14 +2,14 @@ import { debounce } from "lodash";
 import * as React from "react";
 
 export interface WidthProps {
-  children: (options: {ref: React.RefObject<any>, width: number}) => 
+  children: (options: { ref: React.RefObject<any>; width: number }) => any;
 }
 
 /**
  * A reusable component to get the width of an element exposing a render prop
  */
 
-export class Width extends React.Component {
+export class Width extends React.Component<any, { width: number }> {
   private elementToMeasure: React.RefObject<any>;
 
   constructor(props) {
@@ -35,8 +35,7 @@ export class Width extends React.Component {
 
   private measureElement() {
     this.setState({
-      width: this.elementToMeasure.current.offsetWidth,
-      height: this.elementToMeasure.current.offsetWidth
+      width: this.elementToMeasure.current.offsetWidth
     });
   }
   public render() {

@@ -21,7 +21,8 @@
     "lodash": "^4.17.11",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-emotion": "^9.2.12"
+    "react-emotion": "^9.2.12",
+    "simplify-js": "^1.2.3"
   },
   "devDependencies": {
     "jest": "^23.6.0",
