@@ -11,7 +11,7 @@ module.exports = {
       .filter((file, index) => index % takeEvery === 0)
       .map(fileName => directoryPath + "/" + fileName);
   },
-  selectFilesInDirectory(directory, pattern) {
+  selectFilesInDirectory(directoryPath, pattern) {
     if (!fs.existsSync(directoryPath))
       throw new Error("Directory does not exists: " + directoryPath);
     const files = await promisify(fs.readdir)(directoryPath);

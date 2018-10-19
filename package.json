@@ -25,6 +25,7 @@
     "express": "^4.16.4",
     "get-image-data": "^3.0.1",
     "lodash": "^4.17.11",
+    "opencv4nodejs": "^4.9.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-emotion": "^9.2.12",
